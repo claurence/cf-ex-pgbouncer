@@ -1,6 +1,7 @@
 ---
 applications:
 - name: cf-ex-pgbouncer
+  host: cf-ex-pgbouncer-1
   memory: 128M
   instances: 1
   path: .
