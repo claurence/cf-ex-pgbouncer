@@ -1,12 +1,9 @@
 ---
 applications:
-- name: php-test-1
+- name: cf-ex-pgbouncer
   memory: 128M
   instances: 1
-  host: php-test-1
   path: .
   buildpack: https://github.com/dmikusa-pivotal/cf-php-build-pack.git
   services:
   - pgsql-db
-  env:
-    BP_DEBUG: "True"
