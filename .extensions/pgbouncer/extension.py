@@ -32,7 +32,7 @@ def service_environment(ctx):
     #  default, so we need to include it with the app and indicate
     #  the location from which it can be found.
     return {
-        'LD_LIBRARY_PATH': '@HOME/vendor/usr/lib',
+        'LD_LIBRARY_PATH': '$HOME/vendor/usr/lib',
     }
 
 
