@@ -1,10 +1,10 @@
-## CloudFoundry PHP Example Application:  pgbouncer
+# CloudFoundry PHP Example Application:  pgbouncer
 
 This is an example application which also runs [pgbouncer] for Postgres connection pooling.
 
-This is an example of how it's possible to package an extension with your application to run an additional process in the background.  In this case, we package [pgbouncer] but you could adjust the example to run one or more a different process.
+This is an example of how it's possible to run an additional process in the background. In this case, we package [pgbouncer] but you could adjust the example to run one or more a different processes.
 
-### Usage
+## Usage
 
 1. Clone the app (i.e. this repo).
 
@@ -19,10 +19,12 @@ This is an example of how it's possible to package an extension with your applic
   cf create-service elephantsql turtle pgsql
   ```
 
+  If you are using a different service provider, make sure that you edit `.profile` and change the provider name.
+
 1. Push it to CloudFoundry.
 
   ```bash
-  cf push
+  cf push cf-ex-pgbouncer  # change this app name to something unique
   ```
 
   Access your application URL in the browser.  The output should list each service bound to the application and the results of connecting (pg_connect) & pinging (pg_ping) the service.
@@ -33,21 +35,20 @@ This is an example of how it's possible to package an extension with your applic
   cf logs --recent cf-ex-pgbouncer
   ```
 
-### How It Works
+## How It Works
 
 When you push the application here's what happens.
 
-1. The local bits are pushed to your target.  This includes the [pgbouncer] binary, which this example does because it's small.  If you had a larger binary, the extension could download this from somewhere and extract it during the compile phase to make pushing the application faster.
+1. The local bits are pushed to your target. This includes `apt.yml` which is used by the Apt buildpack to install [pgbouncer].
 1. The server downloads the [PHP Buildpack] and runs it.  This installs HTTPD and PHP.
-1. The build pack sees the custom extension that we pushed and runs it.  The extension configures [pgbouncer] based on VCAP_SERVICES.  If you don't want this automatic configuration, you can manually specify database configurations in the included pgbouncer.ini file.  The extension also instructs the build pack to run and monitor the [pgbouncer] process.
-1. At this point, the build pack is done and CF runs our droplet.  This includes HTTPD, PHP & [pgbouncer].
+1. Prior to the application starting, the `.profile` script runs. This configures [pgbouncer] based on `VCAP_SERVICES`. If you don't want this automatic configuration, you can manually specify database configurations in the included `pgbouncer.ini` file.  The script also instructs the build pack to run and monitor the [pgbouncer] process.
+1. At this point, the app runs which includes the processes for HTTPD, PHP-FPM & [pgbouncer].
 
-### Caution
+## Caution
 
-This example application configures [pgbouncer] so that it *works*.  This does not necessarily mean it's the best configuration or that it's a secure configuration.  You should absolutely audit the configuration and adjust as necessary for your application.  
+This example application configures [pgbouncer] so that it *works*.  This does not necessarily mean it's the best configuration or that it's a secure configuration.  You should absolutely audit the configuration and adjust as necessary for your application.
 
 Suggestions for improvements or PR's to the example are welcome as well.
-
 
 [PHP Buildpack]:https://github.com/cloudfoundry/php-buildpack
 [ElephantSQL]:http://www.elephantsql.com/

@@ -2,7 +2,8 @@
 applications:
 - name: cf-ex-pgbouncer
   memory: 128M
-  instances: 1
-  path: .
+  buildpacks:
+  - https://github.com/cloudfoundry/apt-buildpack.git#v0.2.1
+  - php_buildpack
   services:
   - pgsql
