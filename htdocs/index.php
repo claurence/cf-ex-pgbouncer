@@ -1,8 +1,9 @@
 <?php
 // grab connection info
-$services = json_decode($_ENV['VCAP_SERVICES'], true);
+$services = json_decode(getenv('VCAP_SERVICES'), true);
 
 // check each service
+// update `elephantsql` to the name of your service provider
 foreach ($services['elephantsql'] as $service) {
     preg_match('|^postgres://(.*):(.*)@(.*):(.*)/(.*)$|', $service['credentials']['uri'], $m);
     $dbname = $m[5];
